@@ -1,0 +1,325 @@
+/* Core Palette and Variables Definitions */
+:root {
+    --bg-main: #0a0d14;
+    --bg-panel: #111622;
+    --bg-input: #07090e;
+    --border-color: #1e293b;
+    --text-white: #f8fafc;
+    --text-muted: #94a3b8;
+    --cyan-cyber: #00f2fe;
+    --blue-cyber: #4facfe;
+    --purple-node: #a855f7;
+    --orange-queue: #f59e0b;
+    --green-emerald: #10b981;
+    --red-alert: #ef4444;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-white);
+    padding-bottom: 50px;
+}
+
+/* Nav Bar Custom Styling Rules */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-panel);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 40px;
+    height: 70px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.nav-logo {
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: 1.5px;
+    background: linear-gradient(45deg, var(--cyan-cyber), var(--blue-cyber));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+    height: 100%;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    height: 100%;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.nav-item:hover {
+    color: var(--cyan-cyber);
+}
+
+.nav-item.active {
+    color: var(--cyan-cyber);
+    border-bottom: 3px solid var(--cyan-cyber);
+    background: rgba(0, 242, 254, 0.02);
+}
+
+/* Base Body Framework Layouts */
+.container {
+    max-width: 1300px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+header {
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+header p {
+    color: var(--text-muted);
+    margin-top: 5px;
+    font-size: 1rem;
+}
+
+/* Dynamic Tab Switching Controls logic hides inactive components automatically */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Dashboard Grid Component Structs */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.grid-span-2 {
+    grid-column: span 2;
+}
+
+/* Unified Layout Panels definitions */
+.panel {
+    background-color: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.panel h2 {
+    font-size: 1.3rem;
+    color: var(--blue-cyber);
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #1e293b;
+}
+
+.panel-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: -15px;
+    margin-bottom: 20px;
+}
+
+.dsa-badge {
+    font-size: 0.75rem;
+    font-family: monospace;
+    background-color: rgba(0, 242, 254, 0.08);
+    color: var(--cyan-cyber);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 242, 254, 0.2);
+}
+
+/* Input Form Structs */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-white);
+    font-size: 0.95rem;
+    transition: all 0.25s ease-in-out;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--cyan-cyber);
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.15);
+}
+
+/* Interactive Component Bar */
+.search-sort-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.search-sort-bar input {
+    flex: 2;
+}
+
+/* Standardized Button Actions definitions */
+.btn-group {
+    display: flex;
+    gap: 12px;
+}
+
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--cyan-cyber), var(--blue-cyber));
+    color: #05070c;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 242, 254, 0.3);
+}
+
+.btn-secondary {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    color: var(--text-white);
+}
+
+.btn-secondary:hover {
+    background-color: #2d3748;
+}
+
+/* Data View Containers Visual Layout */
+.data-container {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    height: 310px;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.data-item {
+    background-color: rgba(255,255,255,0.02);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--cyan-cyber);
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.data-item span.metadata {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Pointer Architecture Custom Visualizations borders colors */
+.linked-list-node {
+    border-left-color: var(--purple-node);
+}
+.queue-node {
+    border-left-color: var(--orange-queue);
+}
+
+/* Global Footer Utility Box styles */
+.global-controls {
+    margin-top: 35px;
+    background-color: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    padding: 20px 30px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.global-controls h3 {
+    font-size: 1.1rem;
+}
+
+.global-controls p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.btn-group-row {
+    display: flex;
+    gap: 15px;
+}
+
+.export-btn {
+    background: var(--green-emerald);
+    color: #fff;
+}
+.export-btn:hover {
+    background: #059669;
+}
+
+/* Layout Fallback Screen Modifiers */
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    .grid-span-2 {
+        grid-column: span 1;
+    }
+    .navbar {
+        padding: 0 15px;
+    }
+}
