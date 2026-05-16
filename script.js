@@ -1,9 +1,3 @@
-/**
- * =========================================================================
- * 1. CUSTOM DATA STRUCTURES (USING FUNCTIONS & OBJECTS)
- * =========================================================================
- */
-
 let hashTableSize = 50;
 
 function createEmptyHashTable() {
@@ -112,11 +106,7 @@ function convertQueueToArray(queueObject) {
     return list;
 }
 
-/**
- * =========================================================================
- * 2. ALGORITHMS SECTION (SEARCHING & SORTING)
- * =========================================================================
- */
+
 
 function runMergeSort(arr, criteria) {
     if (arr.length <= 1) return arr;
@@ -155,11 +145,6 @@ function runBinarySearch(array, targetTitle) {
     return null;
 }
 
-/**
- * =========================================================================
- * 3. GLOBAL DATABASES & COUNTERS INITIALIZATION
- * =========================================================================
- */
 
 let bookDatabase = createEmptyHashTable();
 let memberDatabase = createEmptyHashTable();
@@ -179,11 +164,6 @@ window.onload = function() {
     refreshDisplay();
 };
 
-/**
- * =========================================================================
- * 4. SYSTEM ACTIONS FUNCTIONS
- * =========================================================================
- */
 
 function addBook() {
     let title = document.getElementById('titleInput').value.trim();
@@ -350,11 +330,6 @@ function sortBooks() {
     saveAllData();
 }
 
-/**
- * =========================================================================
- * 5. RENDERING DYNAMIC DISPLAY GENERATORS
- * =========================================================================
- */
 
 function refreshDisplay() {
     uiRenderBooks();
@@ -436,11 +411,6 @@ function uiRenderQueues() {
     }
 }
 
-/**
- * =========================================================================
- * 6. LOCALSTORAGE PERSISTENCE & CSV EXPORT
- * =========================================================================
- */
 
 function downloadCSV() {
     let data = convertLinkedListToArray(activityLogs);
@@ -524,7 +494,17 @@ function resetAllData() {
     }
 }
 
-// Function to quickly fill the system with sample student project data
+
+
+
+
+
+
+// ********OPtional Section*************
+
+
+
+
 function populateRawData() {
     // 1. Add Sample Books (Auto-increments from 1000)
     let sampleBooks = [
@@ -546,14 +526,13 @@ function populateRawData() {
             author: sampleBooks[i].author,
             genre: sampleBooks[i].genre,
             status: "Available",
-            timestamp: Date.now() + (i * 1000), // spreads out timestamps slightly for date sorting testing
+            timestamp: Date.now() + (i * 1000), 
             waitlist: createWaitlistQueue()
         };
         insertIntoTable(bookDatabase, idString, bookObj);
         addNodeAtStart(activityLogs, "Raw Data Populate: Added Book ID " + idString + " (" + bookObj.title + ")");
     }
 
-    // 2. Add Sample Members (Auto-increments from 2000)
     let sampleMembers = [
         { name: "Hibah Zehra", type: "Student" },
         { name: "Maheen", type: "Student" },
@@ -573,20 +552,15 @@ function populateRawData() {
         addNodeAtStart(activityLogs, "Raw Data Populate: Registered Member ID " + idString + " (" + memberObj.name + ")");
     }
 
-    // 3. Create Sample Borrowing Transactions and Waitlist States manually for demonstration
-    // Let's borrow Book 1000 (The Shining) for Member 2000
     let book1 = searchInTable(bookDatabase, "1000");
     if (book1) {
         book1.status = "Borrowed";
         insertIntoTable(bookDatabase, "1000", book1);
         addNodeAtStart(activityLogs, "Raw Data Populate: Issued Book ID 1000 to Member 2000");
-        
-        // Put Member 2001 into Book 1000's isolated hold list queue
         enqueueMember(book1.waitlist, "2001");
         addNodeAtStart(activityLogs, "Raw Data Populate: Added Member 2001 to waitlist queue for Book ID 1000");
     }
 
-    // Let's borrow Book 1002 (Gone Girl) for Member 2001
     let book2 = searchInTable(bookDatabase, "1002");
     if (book2) {
         book2.status = "Borrowed";
@@ -594,8 +568,7 @@ function populateRawData() {
         addNodeAtStart(activityLogs, "Raw Data Populate: Issued Book ID 1002 to Member 2001");
     }
 
-    // Save everything down to localStorage and reload page views smoothly
     saveAllData();
-    alert("System populated with sample book records, member registry data, and queue structures!");
+    alert("System populated!");
     location.reload();
 }
