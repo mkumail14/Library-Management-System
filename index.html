@@ -3,132 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Management System - DSA Engine</title>
+    <title>Library System - Books</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="nav-logo">📚 LIB-DSA SYSTEM</div>
-        <div class="nav-links">
-            <a href="#" class="nav-item active" onclick="switchTab('catalog')">Books Catalog</a>
-            <a href="#" class="nav-item" onclick="switchTab('circulation')">Circulation Desk</a>
-            <a href="#" class="nav-item" onclick="switchTab('logs')">Data Structures Logs</a>
+    <nav class="nav-bar">
+        <div class="logo">Library System</div>
+        <div class="menu">
+            <a href="index.html" class="tab-link active">Manage Books</a>
+            <a href="issue_return.html" class="tab-link">Issue & Return</a>
+            <a href="systems.html" class="tab-link">System Logs & Credits</a>
         </div>
     </nav>
 
-    <div class="container">
-        <header>
-            <h1>Library Management Framework</h1>
-            <p>Active JavaScript Runtime Powered by Custom Engineered Structures & Algorithms</p>
+    <div class="main-container">
+        <header class="main-header">
+            <h1>Library Management System</h1>
         </header>
 
-        <section id="catalog-tab" class="tab-content active">
-            <div class="dashboard-grid">
-                <div class="panel">
-                    <h2>Add Book Record <span class="dsa-badge">O(1) Hash Entry</span></h2>
-                    <p class="panel-desc">Next Auto-ISBN will be assigned automatically starting from 1000.</p>
-                    <div class="form-group">
-                        <label>Book Title</label>
-                        <input type="text" id="bookTitle" placeholder="e.g., The Shining">
-                    </div>
-                    <div class="form-group">
-                        <label>Author Name</label>
-                        <input type="text" id="bookAuthor" placeholder="e.g., Stephen King">
-                    </div>
-                    <div class="form-group">
-                        <label>Genre</label>
-                        <select id="bookGenre">
-                            <option value="Horror">Horror</option>
-                            <option value="Suspense">Suspense</option>
-                            <option value="Action">Action</option>
-                        </select>
-                    </div>
-                    <div class="btn-group">
-                        <button class="btn-primary" onclick="uiAddBook()">Insert into Hash Map</button>
-                    </div>
+        <div class="row">
+            <div class="box">
+                <h3>Add New Book</h3>
+                <p class="note">Book ID starts from 1000 and increments automatically.</p>
+                <div class="input-div">
+                    <label>Book Title</label>
+                    <input type="text" id="titleInput" placeholder="Enter title">
                 </div>
-
-                <div class="panel">
-                    <h2>Register New Member <span class="dsa-badge">Member Hash Map</span></h2>
-                    <p class="panel-desc">Next Member ID will be assigned automatically starting from 2000.</p>
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" id="memberName" placeholder="e.g., Hibah Zehra">
-                    </div>
-                    <div class="form-group">
-                        <label>Account Class</label>
-                        <select id="memberType">
-                            <option value="Student">Student</option>
-                            <option value="Faculty">Faculty</option>
-                        </select>
-                    </div>
-                    <div class="btn-group" style="margin-top: 70px;">
-                        <button class="btn-primary" onclick="uiAddMember()">Register Member</button>
-                    </div>
+                <div class="input-div">
+                    <label>Author Name</label>
+                    <input type="text" id="authorInput" placeholder="Enter author">
                 </div>
-
-                <div class="panel grid-span-2">
-                    <h2>Active Book Catalog Explorer <span class="dsa-badge">Array Buffer View</span></h2>
-                    <div class="search-sort-bar">
-                        <input type="text" id="catalogSearchInput" placeholder="🔍 Find by exact title... (Binary Search)">
-                        <button class="btn-secondary" onclick="uiTriggerSearch()">Search</button>
-                        <button class="btn-secondary" onclick="uiTriggerSort()">Sort Array (Merge Sort)</button>
-                    </div>
-                    <div class="data-container" id="inventoryDisplay">
-                        </div>
+                <div class="input-div">
+                    <label>Choose Genre</label>
+                    <select id="genreInput">
+                        <option value="Horror">Horror</option>
+                        <option value="Suspense">Suspense</option>
+                        <option value="Action">Action</option>
+                    </select>
                 </div>
+                <button class="btn btn-blue" onclick="addBook()">Add Book</button>
             </div>
-        </section>
 
-        <section id="circulation-tab" class="tab-content">
-            <div class="dashboard-grid">
-                <div class="panel">
-                    <h2>Issue / Return Terminals <span class="dsa-badge">Validation Engine</span></h2>
-                    <p class="panel-desc">Verifies if Member ID and Book ISBN exist before executing transactions.</p>
-                    <div class="form-group">
-                        <label>Member ID (Lookup validation)</label>
-                        <input type="text" id="memberID" placeholder="e.g., 2000">
-                    </div>
-                    <div class="form-group">
-                        <label>Book ISBN (Lookup validation)</label>
-                        <input type="text" id="checkoutISBN" placeholder="e.g., 1000">
-                    </div>
-                    <div class="btn-group" style="margin-top: 20px;">
-                        <button class="btn-primary" onclick="uiIssueBook()">Issue Operations</button>
-                        <button class="btn-secondary" onclick="uiReturnBook()">Process Return</button>
-                    </div>
+            <div class="box">
+                <h3>Register Member</h3>
+                <p class="note">Member ID starts from 2000 and increments automatically.</p>
+                <div class="input-div">
+                    <label>Member Name</label>
+                    <input type="text" id="memberNameInput" placeholder="Enter full name">
                 </div>
+                <div class="input-div">
+                    <label>Member Type</label>
+                    <select id="memberTypeInput">
+                        <option value="Student">Student</option>
+                        <option value="Faculty">Faculty</option>
+                    </select>
+                </div>
+                <button class="btn btn-blue" style="margin-top: 60px;" onclick="addMember()">Add Member</button>
+            </div>
 
-                <div class="panel">
-                    <h2>Per-Book Hold Queues <span class="dsa-badge">Isolated FIFO Queues</span></h2>
-                    <p class="panel-desc">Showing active queues for individual books matching your selection.</p>
-                    <div class="data-container" id="queueDisplay">
-                        </div>
+            <div class="box full-width">
+                <h3>All Books in Library</h3>
+                <div class="search-bar">
+                    <input type="text" id="searchTitle" placeholder="Search book by exact title...">
+                    <button class="btn btn-dark" onclick="searchBook()">Search (Binary Search)</button>
+                    
+                    <select id="sortCriteria" style="max-width: 180px;">
+                        <option value="title">Sort by Name</option>
+                        <option value="id">Sort by ID</option>
+                        <option value="timestamp">Sort by Date Created</option>
+                    </select>
+                    <button class="btn btn-dark" onclick="sortBooks()">Sort List (Merge Sort)</button>
                 </div>
+                <div class="list-container" id="bookListDisplay">
+                    </div>
             </div>
-        </section>
-
-        <section id="logs-tab" class="tab-content">
-            <div class="dashboard-grid">
-                <div class="panel grid-span-2">
-                    <h2>Global Transactions Audit <span class="dsa-badge">Singly Linked List</span></h2>
-                    <div class="data-container history-scroll" id="historyDisplay">
-                        </div>
-                </div>
-            </div>
-            
-            <div class="global-controls">
-                <div>
-                    <h3>Local Database Syncing Engine</h3>
-                    <p>Save internal memory snapshots back to system localStorage profiles.</p>
-                </div>
-                <div class="btn-group-row">
-                    <button class="btn-secondary" onclick="clearSystemStorage()">Reset System</button>
-                    <button class="btn-primary export-btn" onclick="exportHistoryToCSV()">Export Audit to CSV File</button>
-                </div>
-            </div>
-        </section>
+        </div>
     </div>
 
     <script src="script.js"></script>

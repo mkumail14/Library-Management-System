@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library System - Logs</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="nav-bar">
+        <div class="logo">Library System</div>
+        <div class="menu">
+            <a href="index.html" class="tab-link">Manage Books</a>
+            <a href="issue_return.html" class="tab-link">Issue & Return</a>
+            <a href="systems.html" class="tab-link active">System Logs & Credits</a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <header class="main-header">
+            <h1>System Registry & Information</h1>
+            <p>View administrative transaction sequences and team assignments</p>
+        </header>
+
+        <div class="row">
+            <div class="box full-width">
+                <h3>System Action Logs (Linked List)</h3>
+                <div class="list-container" id="logsDisplay">
+                    </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="box full-width">
+                <h3>Project Details & Academic Credits</h3>
+                <div class="btn-row" style="display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; line-height: 1.5;">
+                    <p><strong>Course Name:</strong> Data Structures and Applications</p>
+                    <p><strong>Course Instructor:</strong> Sir M. Shahrukh</p>
+                    <p><strong>Project Created By (BSSE-Sec B):</strong></p>
+                    <ul style="margin-left: 20px; color: var(--text-grey);">
+                        <li>Hibah Zehra (EB25210106034)</li>
+                        <li>Gul e Maheen (EB25210106029)</li>
+                        <li>Shiza Jamal (EB25210106114)</li>
+                        <li>Laveeza Khan Niazi (EB25210106041)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+      <div class="footer-box">
+            <div>
+                <h4>Data Backup Option</h4>
+                <p>Saves all books and records into your browser's local storage.</p>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-blue" onclick="populateRawData()">Populate Raw Data</button>
+                <button class="btn btn-dark" onclick="resetAllData()">Reset All Data</button>
+                <button class="btn btn-green" onclick="downloadCSV()">Export Logs to CSV</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

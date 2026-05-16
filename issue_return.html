@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library System - Circulation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="nav-bar">
+        <div class="logo">Library System</div>
+        <div class="menu">
+            <a href="index.html" class="tab-link">Manage Books</a>
+            <a href="issue_return.html" class="tab-link active">Issue & Return</a>
+            <a href="systems.html" class="tab-link">System Logs & Credits</a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <header class="main-header">
+            <h1>Circulation Desk</h1>
+        </header>
+
+        <div class="row">
+            <div class="box">
+                <h3>Issue or Return a Book</h3>
+                <div class="input-div">
+                    <label>Enter Member ID</label>
+                    <input type="text" id="inputMemberId" placeholder="e.g., 2000">
+                </div>
+                <div class="input-div">
+                    <label>Enter Book ID</label>
+                    <input type="text" id="inputBookId" placeholder="e.g., 1000">
+                </div>
+                <div class="btn-row" style="margin-top: 30px;">
+                    <button class="btn btn-blue" onclick="issueBook()">Issue Book</button>
+                    <button class="btn btn-dark" onclick="returnBook()">Return Book</button>
+                </div>
+            </div>
+
+            <div class="box">
+                <h3>Book Waiting Lists (Queues)</h3>
+                <p class="note">Shows queues for books that are already borrowed.</p>
+                <div class="list-container" id="queueListDisplay">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

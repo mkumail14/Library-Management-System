@@ -1,174 +1,155 @@
 /**
  * =========================================================================
- * 1. CUSTOM DATA STRUCTURE ARCHITECTURES (DSA CORE IMPLEMENTATIONS)
+ * 1. CUSTOM DATA STRUCTURES (USING FUNCTIONS & OBJECTS)
  * =========================================================================
  */
 
-// --- CUSTOM HASH TABLE (For O(1) Quick Lookups) ---
-class HashTable {
-    constructor(size = 50) {
-        this.size = size;
-        this.buckets = Array(size).fill(null).map(() => []);
-    }
+let hashTableSize = 50;
 
-    _hash(key) {
-        let hash = 0;
-        const keyStr = String(key);
-        for (let i = 0; i < keyStr.length; i++) {
-            hash += keyStr.charCodeAt(i);
-        }
-        return hash % this.size;
+function createEmptyHashTable() {
+    let table = new Array(hashTableSize);
+    for (let i = 0; i < hashTableSize; i++) {
+        table[i] = [];
     }
-
-    set(key, value) {
-        const index = this._hash(key);
-        const bucket = this.buckets[index];
-        for (let i = 0; i < bucket.length; i++) {
-            if (bucket[i][0] === key) {
-                bucket[i][1] = value;
-                return;
-            }
-        }
-        bucket.push([key, value]);
-    }
-
-    get(key) {
-        const index = this._hash(key);
-        const bucket = this.buckets[index];
-        for (let i = 0; i < bucket.length; i++) {
-            if (bucket[i][0] === String(key) || bucket[i][0] === Number(key)) {
-                return bucket[i][1];
-            }
-        }
-        return null;
-    }
-
-    getAllValues() {
-        const list = [];
-        for (let i = 0; i < this.size; i++) {
-            for (let j = 0; j < this.buckets[i].length; j++) {
-                list.push(this.buckets[i][j][1]);
-            }
-        }
-        return list;
-    }
+    return table;
 }
 
-// --- SINGLE LINKED LIST CORE (For Logs Tracking Chains) ---
-class ListNode {
-    constructor(actionText, timestamp) {
-        this.actionText = actionText;
-        this.timestamp = timestamp;
-        this.next = null;
+function calculateHash(key) {
+    let total = 0;
+    let keyString = String(key);
+    for (let i = 0; i < keyString.length; i++) {
+        total += keyString.charCodeAt(i);
     }
+    return total % hashTableSize;
 }
 
-class SinglyLinkedList {
-    constructor() {
-        this.head = null;
-    }
-
-    insertAtHead(actionText, timestamp = new Date().toLocaleTimeString()) {
-        const newNode = new ListNode(actionText, timestamp);
-        if (!this.head) {
-            this.head = newNode;
-        } else {
-            newNode.next = this.head;
-            this.head = newNode;
-        }
-    }
-
-    toArray() {
-        const arr = [];
-        let current = this.head;
-        while (current) {
-            arr.push({ log: current.actionText, time: current.timestamp });
-            current = current.next;
-        }
-        return arr;
-    }
-}
-
-// --- QUEUE IMPLEMENTATION (Isolated FIFO Logic Per Book) ---
-class QueueNode {
-    constructor(memberId) {
-        this.memberId = memberId;
-        this.next = null;
-    }
-}
-
-class BookQueue {
-    constructor() {
-        this.front = null;
-        this.rear = null;
-    }
-
-    enqueue(memberId) {
-        const newNode = new QueueNode(memberId);
-        if (!this.rear) {
-            this.front = this.rear = newNode;
+function insertIntoTable(targetTable, key, value) {
+    let index = calculateHash(key);
+    let bucket = targetTable[index];
+    for (let i = 0; i < bucket.length; i++) {
+        if (bucket[i][0] === key) {
+            bucket[i][1] = value;
             return;
         }
-        this.rear.next = newNode;
-        this.rear = newNode;
     }
+    bucket.push([key, value]);
+}
 
-    dequeue() {
-        if (!this.front) return null;
-        const temp = this.front;
-        this.front = this.front.next;
-        if (!this.front) this.rear = null;
-        return temp.memberId;
-    }
-
-    toArray() {
-        const list = [];
-        let current = this.front;
-        while (current) {
-            list.push(current.memberId);
-            current = current.next;
+function searchInTable(targetTable, key) {
+    let index = calculateHash(key);
+    let bucket = targetTable[index];
+    for (let i = 0; i < bucket.length; i++) {
+        if (String(bucket[i][0]) === String(key)) {
+            return bucket[i][1];
         }
-        return list;
     }
+    return null;
+}
+
+function getTableValuesAsArray(targetTable) {
+    let list = [];
+    for (let i = 0; i < hashTableSize; i++) {
+        for (let j = 0; j < targetTable[i].length; j++) {
+            list.push(targetTable[i][j][1]);
+        }
+    }
+    return list;
+}
+
+function createLinkedList() {
+    return { head: null };
+}
+
+function addNodeAtStart(listObject, text, time = new Date().toLocaleTimeString()) {
+    let newNode = { text: text, time: time, next: null };
+    if (listObject.head === null) {
+        listObject.head = newNode;
+    } else {
+        newNode.next = listObject.head;
+        listObject.head = newNode;
+    }
+}
+
+function convertLinkedListToArray(listObject) {
+    let arr = [];
+    let current = listObject.head;
+    while (current !== null) {
+        arr.push({ text: current.text, time: current.time });
+        current = current.next;
+    }
+    return arr;
+}
+
+function createWaitlistQueue() {
+    return { front: null, rear: null };
+}
+
+function enqueueMember(queueObject, memberId) {
+    let newNode = { memberId: memberId, next: null };
+    if (queueObject.rear === null) {
+        queueObject.front = queueObject.rear = newNode;
+        return;
+    }
+    queueObject.rear.next = newNode;
+    queueObject.rear = newNode;
+}
+
+function dequeueMember(queueObject) {
+    if (queueObject.front === null) return null;
+    let removedNode = queueObject.front;
+    queueObject.front = queueObject.front.next;
+    if (queueObject.front === null) queueObject.rear = null;
+    return removedNode.memberId;
+}
+
+function convertQueueToArray(queueObject) {
+    let list = [];
+    let current = queueObject.front;
+    while (current !== null) {
+        list.push(current.memberId);
+        current = current.next;
+    }
+    return list;
 }
 
 /**
  * =========================================================================
- * 2. ALGORITHMIC ENGINES IMPLEMENTATION (SEARCHING & SORTING)
+ * 2. ALGORITHMS SECTION (SEARCHING & SORTING)
  * =========================================================================
  */
 
-function mergeSort(arr) {
+function runMergeSort(arr, criteria) {
     if (arr.length <= 1) return arr;
-    const mid = Math.floor(arr.length / 2);
-    const left = mergeSort(arr.slice(0, mid));
-    const right = mergeSort(arr.slice(mid));
-    return merge(left, right);
+    let mid = Math.floor(arr.length / 2);
+    let leftSide = runMergeSort(arr.slice(0, mid), criteria);
+    let rightSide = runMergeSort(arr.slice(mid), criteria);
+    return mergeParts(leftSide, rightSide, criteria);
 }
 
-function merge(left, right) {
-    let result = [], lIdx = 0, rIdx = 0;
-    while (lIdx < left.length && rIdx < right.length) {
-        if (left[lIdx].title.toLowerCase() < right[rIdx].title.toLowerCase()) {
-            result.push(left[lIdx++]);
-        } else {
-            result.push(right[rIdx++]);
+function mergeParts(left, right, criteria) {
+    let result = [];
+    let i = 0; let j = 0;
+    while (i < left.length && j < right.length) {
+        let valLeft = left[i][criteria];
+        let valRight = right[j][criteria];
+        if (typeof valLeft === 'string') {
+            valLeft = valLeft.toLowerCase();
+            valRight = valRight.toLowerCase();
         }
+        if (valLeft < valRight) { result.push(left[i]); i++; }
+        else { result.push(right[j]); j++; }
     }
-    return result.concat(left.slice(lIdx)).concat(right.slice(rIdx));
+    return result.concat(left.slice(i)).concat(right.slice(j));
 }
 
-function binarySearchByTitle(sortedArray, targetTitle) {
-    let low = 0;
-    let high = sortedArray.length - 1;
-    const cleanTarget = targetTitle.toLowerCase().trim();
-
+function runBinarySearch(array, targetTitle) {
+    let low = 0; let high = array.length - 1;
+    let target = targetTitle.toLowerCase().trim();
     while (low <= high) {
-        const mid = Math.floor((low + high) / 2);
-        const midVal = sortedArray[mid].title.toLowerCase().trim();
-
-        if (midVal === cleanTarget) return sortedArray[mid];
-        if (midVal < cleanTarget) low = mid + 1;
+        let mid = Math.floor((low + high) / 2);
+        let middleValue = array[mid].title.toLowerCase().trim();
+        if (middleValue === target) return array[mid];
+        if (middleValue < target) low = mid + 1;
         else high = mid - 1;
     }
     return null;
@@ -176,351 +157,445 @@ function binarySearchByTitle(sortedArray, targetTitle) {
 
 /**
  * =========================================================================
- * 3. RUNTIME GLOBAL DATABASES & AUTO-INCREMENT ARCHITECTURE
+ * 3. GLOBAL DATABASES & COUNTERS INITIALIZATION
  * =========================================================================
  */
 
-const BookCatalog = new HashTable();   // Mapped storage for Books
-const MemberRegistry = new HashTable(); // Mapped storage for Members
-const AuditTrail = new SinglyLinkedList();
+let bookDatabase = createEmptyHashTable();
+let memberDatabase = createEmptyHashTable();
+let activityLogs = createLinkedList();
 
-// Auto-increment track registers starting counters
-let currentIsbnCounter = 1000;
-let currentMemberIdCounter = 2000;
+let nextBookId = 1000;
+let nextMemberId = 2000;
 
 window.onload = function() {
-    loadMemoryFromLocalStorage();
-    uiRenderAllContainers();
+    loadSavedData();
+    
+    let currentLogs = convertLinkedListToArray(activityLogs);
+    if (currentLogs.length === 0) {
+        addNodeAtStart(activityLogs, "Project executed by Hibah, Gul e Maheen, Shiza, and Laveeza.");
+    }
+    
+    refreshDisplay();
 };
 
 /**
  * =========================================================================
- * 4. UI HANDLERS & IMPLEMENTED VALIDATION CHECK RUNTIMES
+ * 4. SYSTEM ACTIONS FUNCTIONS
  * =========================================================================
  */
 
-function switchTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-    document.getElementById(tabId + '-tab').classList.add('active');
-    event.currentTarget.classList.add('active');
-}
+function addBook() {
+    let title = document.getElementById('titleInput').value.trim();
+    let author = document.getElementById('authorInput').value.trim();
+    let genre = document.getElementById('genreInput').value;
 
-// Requirement 3: Add Book with Auto-Assign ISBN (Starting from 1000)
-function uiAddBook() {
-    const title = document.getElementById('bookTitle').value.trim();
-    const author = document.getElementById('bookAuthor').value.trim();
-    const genre = document.getElementById('bookGenre').value;
-
-    if (!title || !author) {
-        alert("Action rejected. Book title and author inputs are mandatory.");
+    if (title === "" || author === "") {
+        alert("Please enter all book details first.");
         return;
     }
 
-    const assignedIsbn = String(currentIsbnCounter++);
-    
-    // Requirement 4: Every book record gets its own dedicated Queue instance assigned internally
-    const bookObj = { 
-        isbn: assignedIsbn, 
-        title, 
-        author, 
-        genre, 
-        status: 'Available',
-        reservationQueue: new BookQueue() 
+    let idString = String(nextBookId);
+    nextBookId++;
+
+    let newBook = {
+        id: idString,
+        title: title,
+        author: author,
+        genre: genre,
+        status: "Available",
+        timestamp: Date.now(), 
+        waitlist: createWaitlistQueue() 
     };
 
-    BookCatalog.set(assignedIsbn, bookObj);
-    AuditTrail.insertAtHead(`Registered Book. Auto-Assigned ISBN: ${assignedIsbn} (${title})`);
+    insertIntoTable(bookDatabase, idString, newBook);
+    addNodeAtStart(activityLogs, "Added Book ID: " + idString + " (" + title + ")");
 
-    saveMemoryToLocalStorage();
-    uiRenderAllContainers();
+    saveAllData();
+    refreshDisplay();
 
-    document.getElementById('bookTitle').value = '';
-    document.getElementById('bookAuthor').value = '';
+    document.getElementById('titleInput').value = "";
+    document.getElementById('authorInput').value = "";
 }
 
-// Requirement 1 & 3: Create Member with Auto-Assign ID (Starting from 2000)
-function uiAddMember() {
-    const name = document.getElementById('memberName').value.trim();
-    const type = document.getElementById('memberType').value;
+function addMember() {
+    let name = document.getElementById('memberNameInput').value.trim();
+    let type = document.getElementById('memberTypeInput').value;
 
-    if (!name) {
-        alert("Action rejected. Member name field is mandatory.");
+    if (name === "") {
+        alert("Please enter member name first.");
         return;
     }
 
-    const assignedMemberId = String(currentMemberIdCounter++);
-    const memberObj = { id: assignedMemberId, name, type };
+    let idString = String(nextMemberId);
+    nextMemberId++;
 
-    MemberRegistry.set(assignedMemberId, memberObj);
-    AuditTrail.insertAtHead(`Registered Member. Auto-Assigned ID: ${assignedMemberId} (${name})`);
+    let newMember = { id: idString, name: name, type: type };
 
-    saveMemoryToLocalStorage();
-    uiRenderAllContainers();
+    insertIntoTable(memberDatabase, idString, newMember);
+    addNodeAtStart(activityLogs, "Registered Member ID: " + idString + " (" + name + ")");
 
-    document.getElementById('memberName').value = '';
+    saveAllData();
+    refreshDisplay();
+
+    document.getElementById('memberNameInput').value = "";
 }
 
-// Requirement 2: Validate if Member ID and Book ISBN exist while issuing/borrowing
-function uiIssueBook() {
-    const memberId = document.getElementById('memberID').value.trim();
-    const isbn = document.getElementById('checkoutISBN').value.trim();
+function issueBook() {
+    let mId = document.getElementById('inputMemberId').value.trim();
+    let bId = document.getElementById('inputBookId').value.trim();
 
-    if (!memberId || !isbn) {
-        alert("Please enter both Member ID and Book ISBN.");
+    if (mId === "" || bId === "") {
+        alert("Please enter both Member ID and Book ID.");
         return;
     }
 
-    // Validation Check Step 1: Does member exist?
-    const memberExists = MemberRegistry.get(memberId);
-    if (!memberExists) {
-        alert(`Validation Error: Member ID "${memberId}" does not exist in the registry system.`);
+    let targetMember = searchInTable(memberDatabase, mId);
+    if (targetMember === null) {
+        alert("Error: Member ID " + mId + " does not exist!");
         return;
     }
 
-    // Validation Check Step 2: Does book exist?
-    const bookObj = BookCatalog.get(isbn);
-    if (!bookObj) {
-        alert(`Validation Error: Book ISBN "${isbn}" does not exist inside the catalog system.`);
+    let targetBook = searchInTable(bookDatabase, bId);
+    if (targetBook === null) {
+        alert("Error: Book ID " + bId + " does not exist!");
         return;
     }
 
-    // Processing Allocation
-    if (bookObj.status === 'Available') {
-        bookObj.status = 'Borrowed';
-        BookCatalog.set(isbn, bookObj);
-        AuditTrail.insertAtHead(`Success: Issued ISBN ${isbn} to Member ${memberId} (${memberExists.name})`);
+    if (targetBook.status === "Available") {
+        targetBook.status = "Borrowed";
+        insertIntoTable(bookDatabase, bId, targetBook);
+        addNodeAtStart(activityLogs, "Issued Book ID " + bId + " to Member " + mId);
     } else {
-        // Requirement 4: Enqueue borrower inside that specific book's isolated storage list queue
-        bookObj.reservationQueue.enqueue(memberId);
-        BookCatalog.set(isbn, bookObj);
-        AuditTrail.insertAtHead(`Hold Placed: ISBN ${isbn} is busy. Member ${memberId} added to its isolated queue.`);
+        enqueueMember(targetBook.waitlist, mId);
+        insertIntoTable(bookDatabase, bId, targetBook);
+        addNodeAtStart(activityLogs, "Book busy. Added Member " + mId + " to waitlist queue for Book ID " + bId);
     }
 
-    saveMemoryToLocalStorage();
-    uiRenderAllContainers();
+    saveAllData();
+    refreshDisplay();
 }
 
-function uiReturnBook() {
-    const isbn = document.getElementById('checkoutISBN').value.trim();
-    if (!isbn) return;
+function returnBook() {
+    let bId = document.getElementById('inputBookId').value.trim();
+    if (bId === "") return;
 
-    const bookObj = BookCatalog.get(isbn);
-    if (!bookObj) {
-        alert(`Validation Error: Target return ISBN "${isbn}" does not exist.`);
+    let targetBook = searchInTable(bookDatabase, bId);
+    if (targetBook === null) {
+        alert("Error: Book ID " + bId + " does not exist!");
         return;
     }
 
-    // Requirement 4: Pop next reservation directly out of the book's individual queue instance
-    const nextMemberInQueue = bookObj.reservationQueue.dequeue();
+    activityLogs.addNodeAtStart("Returned Book ID " + bId);
+    let nextPerson = dequeueMember(targetBook.waitlist);
     
-    if (nextMemberInQueue) {
-        const nextMemberObj = MemberRegistry.get(nextMemberInQueue);
-        AuditTrail.insertAtHead(`Queue Hold Resolved: ISBN ${isbn} auto-assigned to waiting member ${nextMemberInQueue} (${nextMemberObj.name})`);
+    if (nextPerson !== null) {
+        addNodeAtStart(activityLogs, "Waitlist updated. Book ID " + bId + " passed to next Member " + nextPerson);
     } else {
-        bookObj.status = 'Available';
-        AuditTrail.insertAtHead(`Success: Returned ISBN ${isbn}. Status marked back to Available.`);
+        targetBook.status = "Available";
     }
 
-    BookCatalog.set(isbn, bookObj);
-    saveMemoryToLocalStorage();
-    uiRenderAllContainers();
+    insertIntoTable(bookDatabase, bId, targetBook);
+    saveAllData();
+    refreshDisplay();
 }
 
-/**
- * =========================================================================
- * 5. SEARCH, SORT, AND DATA RENDERING ENGINE GENERATORS
- * =========================================================================
- */
+function searchBook() {
+    let allBooks = getTableValuesAsArray(bookDatabase);
+    let query = document.getElementById('searchTitle').value.trim();
+    if (query === "") { refreshDisplay(); return; }
 
-function uiTriggerSearch() {
-    const rawList = BookCatalog.getAllValues();
-    const query = document.getElementById('catalogSearchInput').value.trim();
-    if (!query) { uiRenderAllContainers(); return; }
+    let sorted = runMergeSort(allBooks, "title"); 
+    let result = runBinarySearch(sorted, query);
+    let container = document.getElementById('bookListDisplay');
+    if (!container) return;
+    container.innerHTML = "";
 
-    const sortedList = mergeSort(rawList);
-    const matchedBook = binarySearchByTitle(sortedList, query);
-    const container = document.getElementById('inventoryDisplay');
-    container.innerHTML = '';
-
-    if (matchedBook) {
+    if (result !== null) {
         container.innerHTML = `
-            <div class="data-item" style="border-left-color: var(--green-emerald); background: rgba(16,185,129,0.05)">
-                <div><strong>🎯 MATCH FOUND: ${matchedBook.title}</strong><br>
-                <span>ISBN: ${matchedBook.isbn} | Author: ${matchedBook.author} | Genre: ${matchedBook.genre}</span></div>
-                <span style="color: ${matchedBook.status === 'Available' ? 'var(--green-emerald)' : 'var(--red-alert)'}">${matchedBook.status}</span>
+            <div class="item-row" style="background: rgba(16,185,129,0.05)">
+                <div><strong>Match Found: ${result.title}</strong><br>
+                <span>ID: ${result.id} | Author: ${result.author} | Genre: ${result.genre}</span></div>
+                <span style="color: ${result.status === 'Available' ? 'var(--green)' : 'var(--red)'}">${result.status}</span>
             </div>`;
     } else {
-        container.innerHTML = `<div style="color: var(--red-alert); padding: 10px;">No matching catalog items found.</div>`;
+        container.innerHTML = `<div style="color: var(--red); padding: 10px;">No matching book title found.</div>`;
     }
 }
 
-function uiTriggerSort() {
-    const rawList = BookCatalog.getAllValues();
-    if (rawList.length === 0) return;
-    const sortedList = mergeSort(rawList);
-    const container = document.getElementById('inventoryDisplay');
-    container.innerHTML = '';
+function sortBooks() {
+    let allBooks = getTableValuesAsArray(bookDatabase);
+    if (allBooks.length === 0) return;
+    
+    let chosenCriteria = document.getElementById('sortCriteria').value;
+    let sorted = runMergeSort(allBooks, chosenCriteria);
+    let container = document.getElementById('bookListDisplay');
+    if (!container) return;
+    container.innerHTML = "";
 
-    sortedList.forEach(book => {
-        const item = document.createElement('div');
-        item.className = 'data-item';
-        item.innerHTML = `
-            <div><strong>${book.title}</strong><br><span class="metadata">ISBN: ${book.isbn} | Author: ${book.author}</span></div>
-            <span style="color: ${book.status === 'Available' ? 'var(--green-emerald)' : 'var(--red-alert)'}">${book.status}</span>`;
-        container.appendChild(item);
-    });
-    AuditTrail.insertAtHead("Executed runtime catalog organization using Merge Sort logic.");
-    uiRenderHistoryContainer();
+    let criteriaFriendlyName = "Name";
+    if (chosenCriteria === "id") criteriaFriendlyName = "ID";
+    if (chosenCriteria === "timestamp") criteriaFriendlyName = "Date of Creation";
+
+    for (let i = 0; i < sorted.length; i++) {
+        let b = sorted[i];
+        let element = document.createElement('div');
+        element.className = 'item-row';
+        element.innerHTML = `
+            <div><strong>${b.title}</strong><br><span>ID: ${b.id} | Author: ${b.author}</span></div>
+            <span style="color: ${b.status === 'Available' ? 'var(--green)' : 'var(--red)'}">${b.status}</span>`;
+        container.appendChild(element);
+    }
+    addNodeAtStart(activityLogs, "Sorted entire book collection by " + criteriaFriendlyName + " using Merge Sort.");
+    saveAllData();
 }
 
-function uiRenderAllContainers() {
-    uiRenderInventoryContainer();
-    uiRenderHistoryContainer();
-    uiRenderQueueContainer();
+/**
+ * =========================================================================
+ * 5. RENDERING DYNAMIC DISPLAY GENERATORS
+ * =========================================================================
+ */
+
+function refreshDisplay() {
+    uiRenderBooks();
+    uiRenderLogs();
+    uiRenderQueues();
 }
 
-function uiRenderInventoryContainer() {
-    const container = document.getElementById('inventoryDisplay');
-    container.innerHTML = '';
-    const items = BookCatalog.getAllValues();
+function uiRenderBooks() {
+    let container = document.getElementById('bookListDisplay');
+    if (!container) return; // If element isn't on current active page, exit
+    container.innerHTML = "";
+    let books = getTableValuesAsArray(bookDatabase);
 
-    if(items.length === 0) {
-        container.innerHTML = `<div style="color: var(--text-muted); padding: 10px;">No books registered in system memory registers.</div>`;
+    if (books.length === 0) {
+        container.innerHTML = `<div style="color: var(--text-grey); padding: 10px;">No books added yet.</div>`;
         return;
     }
-
-    items.forEach(book => {
-        const el = document.createElement('div');
-        el.className = 'data-item';
-        el.innerHTML = `
-            <div><strong>${book.title}</strong><br><span class="metadata">ISBN: ${book.isbn} | Author: ${book.author} | Genre: ${book.genre}</span></div>
-            <span style="color: ${book.status === 'Available' ? 'var(--green-emerald)' : 'var(--red-alert)'}">${book.status}</span>`;
-        container.appendChild(el);
-    });
+    for (let i = 0; i < books.length; i++) {
+        let b = books[i];
+        let element = document.createElement('div');
+        element.className = 'item-row';
+        element.innerHTML = `
+            <div><strong>${b.title}</strong><br><span>ID: ${b.id} | Genre: ${b.genre}</span></div>
+            <span style="color: ${b.status === 'Available' ? 'var(--green)' : 'var(--red)'}">${b.status}</span>`;
+        container.appendChild(element);
+    }
 }
 
-function uiRenderHistoryContainer() {
-    const container = document.getElementById('historyDisplay');
-    container.innerHTML = '';
-    const logs = AuditTrail.toArray();
+function uiRenderLogs() {
+    let container = document.getElementById('logsDisplay');
+    if (!container) return;
+    container.innerHTML = "";
+    let logs = convertLinkedListToArray(activityLogs);
 
-    if(logs.length === 0) {
-        container.innerHTML = `<div style="color: var(--text-muted); padding: 10px;">Audit trail unallocated.</div>`;
+    if (logs.length === 0) {
+        container.innerHTML = `<div style="color: var(--text-grey); padding: 10px;">No logs recorded yet.</div>`;
         return;
     }
-
-    logs.forEach((logItem, idx) => {
-        const el = document.createElement('div');
-        el.className = 'data-item linked-list-node';
-        el.innerHTML = `
-            <div><strong>${logItem.log}</strong><br><span class="metadata">Timestamp: ${logItem.time}</span></div>
-            <span class="dsa-badge" style="border-color: var(--purple-node); color: var(--purple-node)">${idx === 0 ? 'HEAD PTR' : 'NODE'}</span>`;
-        container.appendChild(el);
-    });
+    for (let i = 0; i < logs.length; i++) {
+        let l = logs[i];
+        let element = document.createElement('div');
+        element.className = 'item-row linked-list-node';
+        element.innerHTML = `
+            <div><strong>${l.text}</strong><br><span>Time: ${l.time}</span></div>
+            <span class="dsa-badge" style="border-color: var(--purple); color: var(--purple)">${i === 0 ? 'HEAD' : 'NODE'}</span>`;
+        container.appendChild(element);
+    }
 }
 
-// Requirement 4: Renders isolated hold queue listings for all items currently showing waiting entries
-function uiRenderQueueContainer() {
-    const container = document.getElementById('queueDisplay');
-    container.innerHTML = '';
-    const allBooks = BookCatalog.getAllValues();
-    let holdCount = 0;
+function uiRenderQueues() {
+    let container = document.getElementById('queueListDisplay');
+    if (!container) return;
+    container.innerHTML = "";
+    let books = getTableValuesAsArray(bookDatabase);
+    let totalQueuesShowing = 0;
 
-    allBooks.forEach(book => {
-        const queueArr = book.reservationQueue.toArray();
-        if (queueArr.length > 0) {
-            holdCount++;
-            queueArr.forEach((waitingMemberId, index) => {
-                const memberObj = MemberRegistry.get(waitingMemberId);
-                const el = document.createElement('div');
-                el.className = 'data-item queue-node';
-                el.innerHTML = `
-                    <div><strong>Book ISBN ${book.isbn} holds list:</strong><br>
-                    <span class="metadata">Waiting Member: ID ${waitingMemberId} (${memberObj ? memberObj.name : 'Unknown'})</span></div>
-                    <span class="dsa-badge" style="border-color: var(--orange-queue); color: var(--orange-queue)">${index === 0 ? 'FRONT' : 'POS ' + (index + 1)}</span>`;
-                container.appendChild(el);
-            });
+    for (let i = 0; i < books.length; i++) {
+        let currentBook = books[i];
+        let queueArray = convertQueueToArray(currentBook.waitlist);
+        if (queueArray.length > 0) {
+            totalQueuesShowing++;
+            for (let j = 0; j < queueArray.length; j++) {
+                let mId = queueArray[j];
+                let memberObj = searchInTable(memberDatabase, mId);
+                let nameStr = memberObj ? memberObj.name : "Unknown";
+
+                let element = document.createElement('div');
+                element.className = 'item-row queue-node';
+                element.innerHTML = `
+                    <div><strong>Book ID ${currentBook.id} Waiting Queue:</strong><br>
+                    <span>Member: ID ${mId} (${nameStr})</span></div>
+                    <span class="dsa-badge" style="border-color: var(--orange); color: var(--orange)">${j === 0 ? 'FRONT' : 'POS ' + (j + 1)}</span>`;
+                container.appendChild(element);
+            }
         }
-    });
-
-    if (holdCount === 0) {
-        container.innerHTML = `<div style="color: var(--text-muted); padding: 10px;">No isolated hold queues currently active in the system pipeline buffers.</div>`;
+    }
+    if (totalQueuesShowing === 0) {
+        container.innerHTML = `<div style="color: var(--text-grey); padding: 10px;">No active waiting list queues.</div>`;
     }
 }
 
 /**
  * =========================================================================
- * 6. BACKEND STORAGE UTILITIES & JSON STRINGIFICATION COMPATIBILITY
+ * 6. LOCALSTORAGE PERSISTENCE & CSV EXPORT
  * =========================================================================
  */
 
-function exportHistoryToCSV() {
-    const data = AuditTrail.toArray();
+function downloadCSV() {
+    let data = convertLinkedListToArray(activityLogs);
     if (data.length === 0) return;
-    let csvContent = "data:text/csv;charset=utf-8,Timestamp,Transaction Details\n";
-    data.forEach(item => { csvContent += `"${item.time}","${item.log.replace(/"/g, '""')}"\n`; });
-    const encodedUri = encodeURI(csvContent);
-    const downloadAnchor = document.createElement("a");
-    downloadAnchor.setAttribute("href", encodedUri);
-    downloadAnchor.setAttribute("download", "Library_DSA_Audit_Trail.csv");
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    document.body.removeChild(downloadAnchor);
+    let csvString = "data:text/csv;charset=utf-8,Time,Action Details\n";
+    for (let i = 0; i < data.length; i++) {
+        csvString += `"${data[i].time}","${data[i].text}"\n`;
+    }
+    let encoded = encodeURI(csvString);
+    let link = document.createElement("a");
+    link.setAttribute("href", encoded);
+    link.setAttribute("download", "Library_System_Logs.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
-function saveMemoryToLocalStorage() {
-    const books = BookCatalog.getAllValues();
-    // Serialization mapper format backup copies isolated instance parameters arrays data models structures 
-    const packagedBooks = books.map(b => ({
-        isbn: b.isbn, title: b.title, author: b.author, genre: b.genre, status: b.status,
-        queueData: b.reservationQueue.toArray()
-    }));
-    
-    const members = MemberRegistry.getAllValues();
-    const history = AuditTrail.toArray();
-
-    localStorage.setItem('lms_books_v2', JSON.stringify(packagedBooks));
-    localStorage.setItem('lms_members_v2', JSON.stringify(members));
-    localStorage.setItem('lms_history_v2', JSON.stringify(history));
-    localStorage.setItem('lms_counters_v2', JSON.stringify({ isbn: currentIsbnCounter, member: currentMemberIdCounter }));
-}
-
-function loadMemoryFromLocalStorage() {
-    const cachedBooks = localStorage.getItem('lms_books_v2');
-    const cachedMembers = localStorage.getItem('lms_members_v2');
-    const cachedHistory = localStorage.getItem('lms_history_v2');
-    const cachedCounters = localStorage.getItem('lms_counters_v2');
-
-    if (cachedCounters) {
-        const counters = JSON.parse(cachedCounters);
-        currentIsbnCounter = counters.isbn;
-        currentMemberIdCounter = counters.member;
-    }
-    if (cachedMembers) {
-        JSON.parse(cachedMembers).forEach(m => MemberRegistry.set(m.id, m));
-    }
-    if (cachedBooks) {
-        JSON.parse(cachedBooks).forEach(b => {
-            const qInstance = new BookQueue();
-            b.queueData.forEach(mId => qInstance.enqueue(mId));
-            BookCatalog.set(b.isbn, {
-                isbn: b.isbn, title: b.title, author: b.author, genre: b.genre, status: b.status,
-                reservationQueue: qInstance
-            });
+function saveAllData() {
+    let booksArr = getTableValuesAsArray(bookDatabase);
+    let formattedBooks = [];
+    for (let i = 0; i < booksArr.length; i++) {
+        let b = booksArr[i];
+        formattedBooks.push({
+            id: b.id, title: b.title, author: b.author, genre: b.genre, status: b.status, timestamp: b.timestamp,
+            flatQueue: convertQueueToArray(b.waitlist)
         });
     }
-    if (cachedHistory) {
-        const parsed = JSON.parse(cachedHistory);
-        for (let i = parsed.length - 1; i >= 0; i--) {
-            AuditTrail.insertAtHead(parsed[i].log, parsed[i].time);
+    let membersArr = getTableValuesAsArray(memberDatabase);
+    let logsArr = convertLinkedListToArray(activityLogs);
+
+    localStorage.setItem('student_books', JSON.stringify(formattedBooks));
+    localStorage.setItem('student_members', JSON.stringify(membersArr));
+    localStorage.setItem('student_logs', JSON.stringify(logsArr));
+    localStorage.setItem('student_counters', JSON.stringify({ book: nextBookId, member: nextMemberId }));
+}
+
+function loadSavedData() {
+    let savedBooks = localStorage.getItem('student_books');
+    let savedMembers = localStorage.getItem('student_members');
+    let savedLogs = localStorage.getItem('student_logs');
+    let savedCounters = localStorage.getItem('student_counters');
+
+    if (savedCounters) {
+        let c = JSON.parse(savedCounters);
+        nextBookId = c.book;
+        nextMemberId = c.member;
+    }
+    if (savedMembers) {
+        let m = JSON.parse(savedMembers);
+        for (let i = 0; i < m.length; i++) {
+            insertIntoTable(memberDatabase, m[i].id, m[i]);
+        }
+    }
+    if (savedBooks) {
+        let b = JSON.parse(savedBooks);
+        for (let i = 0; i < b.length; i++) {
+            let bookData = b[i];
+            let newQueue = createWaitlistQueue();
+            for (let j = 0; j < bookData.flatQueue.length; j++) {
+                enqueueMember(newQueue, bookData.flatQueue[j]);
+            }
+            insertIntoTable(bookDatabase, bookData.id, {
+                id: bookData.id, title: bookData.title, author: bookData.author, genre: bookData.genre, status: bookData.status,
+                timestamp: bookData.timestamp || Date.now(),
+                waitlist: newQueue
+            });
+        }
+    }
+    if (savedLogs) {
+        let l = JSON.parse(savedLogs);
+        for (let i = l.length - 1; i >= 0; i--) {
+            addNodeAtStart(activityLogs, l[i].text, l[i].time);
         }
     }
 }
 
-function clearSystemStorage() {
-    if(confirm("Are you sure you want to completely clear all system datasets and configuration values?")) {
+function resetAllData() {
+    if(confirm("Reset all data profiles?")) {
         localStorage.clear();
         location.reload();
     }
+}
+
+// Function to quickly fill the system with sample student project data
+function populateRawData() {
+    // 1. Add Sample Books (Auto-increments from 1000)
+    let sampleBooks = [
+        { title: "The Shining", author: "Stephen King", genre: "Horror" },
+        { title: "Dracula", author: "Bram Stoker", genre: "Horror" },
+        { title: "Gone Girl", author: "Gillian Flynn", genre: "Suspense" },
+        { title: "The Silent Patient", author: "Alex Michaelides", genre: "Suspense" },
+        { title: "The Bourne Identity", author: "Robert Ludlum", genre: "Action" },
+        { title: "Die Trying", author: "Lee Child", genre: "Action" }
+    ];
+
+    for (let i = 0; i < sampleBooks.length; i++) {
+        let idString = String(nextBookId);
+        nextBookId++;
+        
+        let bookObj = {
+            id: idString,
+            title: sampleBooks[i].title,
+            author: sampleBooks[i].author,
+            genre: sampleBooks[i].genre,
+            status: "Available",
+            timestamp: Date.now() + (i * 1000), // spreads out timestamps slightly for date sorting testing
+            waitlist: createWaitlistQueue()
+        };
+        insertIntoTable(bookDatabase, idString, bookObj);
+        addNodeAtStart(activityLogs, "Raw Data Populate: Added Book ID " + idString + " (" + bookObj.title + ")");
+    }
+
+    // 2. Add Sample Members (Auto-increments from 2000)
+    let sampleMembers = [
+        { name: "Hibah Zehra", type: "Student" },
+        { name: "Maheen", type: "Student" },
+        { name: "Kumail", type: "Faculty" }
+    ];
+
+    for (let i = 0; i < sampleMembers.length; i++) {
+        let idString = String(nextMemberId);
+        nextMemberId++;
+
+        let memberObj = {
+            id: idString,
+            name: sampleMembers[i].name,
+            type: sampleMembers[i].type
+        };
+        insertIntoTable(memberDatabase, idString, memberObj);
+        addNodeAtStart(activityLogs, "Raw Data Populate: Registered Member ID " + idString + " (" + memberObj.name + ")");
+    }
+
+    // 3. Create Sample Borrowing Transactions and Waitlist States manually for demonstration
+    // Let's borrow Book 1000 (The Shining) for Member 2000
+    let book1 = searchInTable(bookDatabase, "1000");
+    if (book1) {
+        book1.status = "Borrowed";
+        insertIntoTable(bookDatabase, "1000", book1);
+        addNodeAtStart(activityLogs, "Raw Data Populate: Issued Book ID 1000 to Member 2000");
+        
+        // Put Member 2001 into Book 1000's isolated hold list queue
+        enqueueMember(book1.waitlist, "2001");
+        addNodeAtStart(activityLogs, "Raw Data Populate: Added Member 2001 to waitlist queue for Book ID 1000");
+    }
+
+    // Let's borrow Book 1002 (Gone Girl) for Member 2001
+    let book2 = searchInTable(bookDatabase, "1002");
+    if (book2) {
+        book2.status = "Borrowed";
+        insertIntoTable(bookDatabase, "1002", book2);
+        addNodeAtStart(activityLogs, "Raw Data Populate: Issued Book ID 1002 to Member 2001");
+    }
+
+    // Save everything down to localStorage and reload page views smoothly
+    saveAllData();
+    alert("System populated with sample book records, member registry data, and queue structures!");
+    location.reload();
 }
