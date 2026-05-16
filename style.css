@@ -1,17 +1,17 @@
-/* Color Styling */
+/* Vintage Brown & Cream Palette Settings */
 :root {
-    --bg-dark: #0a0d14;
-    --bg-box: #111622;
-    --bg-input: #07090e;
-    --border-line: #1e293b;
-    --text-color: #f8fafc;
-    --text-grey: #94a3b8;
-    --cyan: #00f2fe;
-    --blue: #4facfe;
-    --purple: #a855f7;
-    --orange: #f59e0b;
-    --green: #10b981;
-    --red: #ef4444;
+    --bg-dark: #fbf8f3;       /* Soft Light Cream Page Background */
+    --bg-box: #ffffff;        /* Crisp White Box Panels */
+    --bg-input: #f4eee1;      /* Deep Cream Input Boxes */
+    --border-line: #dcd1be;   /* Muted Light Brown Outlines */
+    --text-color: #3e2723;    /* Deep Chocolate Dark Brown Text */
+    --text-grey: #795548;     /* Warm Medium Brown Subtle Text */
+    --cyan: #8d6e63;          /* Neutral Clay Brown Highlights */
+    --blue: #5d4037;          /* Strong Deep Espresso Brown Headings */
+    --purple: #6d4c41;        /* Reddish-Brown Node Accent */
+    --orange: #b15d2e;        /* Warm Terracotta Queue Accent */
+    --green: #4e6e5d;         /* Sage Muted Green Action Success */
+    --red: #a94442;           /* Brick Red Error Alerts */
 }
 
 * {
@@ -27,23 +27,24 @@ body {
     padding-bottom: 40px;
 }
 
-/* Nav Bar Styling */
+/* Nav Bar Layout Rules */
 .nav-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--bg-box);
-    border-bottom: 1px solid var(--border-line);
+    background-color: var(--blue);
+    border-bottom: 2px solid var(--border-line);
     padding: 0 30px;
     height: 60px;
     position: sticky;
     top: 0;
+    z-index: 1000;
 }
 
 .logo {
     font-weight: bold;
     font-size: 1.2rem;
-    color: var(--cyan);
+    color: var(--bg-dark); /* Contrast logo text against dark brown navbar */
 }
 
 .menu {
@@ -54,24 +55,28 @@ body {
 
 .tab-link {
     text-decoration: none;
-    color: var(--text-grey);
+    color: #d7ccc8; /* Soft tan text color */
     font-size: 0.9rem;
     display: flex;
     align-items: center;
     padding: 0 15px;
     height: 100%;
+    transition: all 0.2s ease;
 }
 
 .tab-link:hover {
-    color: var(--cyan);
+    color: var(--bg-dark);
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .tab-link.active {
-    color: var(--cyan);
-    border-bottom: 3px solid var(--cyan);
+    color: var(--bg-dark);
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-bottom: 4px solid var(--bg-dark);
 }
 
-/* Container Structure */
+/* Main Layout Framework */
 .main-container {
     max-width: 1200px;
     margin: 20px auto;
@@ -80,18 +85,22 @@ body {
 
 .main-header {
     margin-bottom: 25px;
+    border-bottom: 1px solid var(--border-line);
+    padding-bottom: 15px;
 }
 
 .main-header h1 {
     font-size: 1.8rem;
+    color: var(--blue);
 }
 
 .main-header p {
     color: var(--text-grey);
     font-size: 0.9rem;
+    margin-top: 4px;
 }
 
-/* Tabs Toggle Logic */
+/* Tab contents hidden state */
 .tab-content {
     display: none;
 }
@@ -100,7 +109,7 @@ body {
     display: block;
 }
 
-/* Grid Layout */
+/* Flex Row & Form Box Panels */
 .row {
     display: flex;
     flex-wrap: wrap;
@@ -115,6 +124,7 @@ body {
     padding: 20px;
     flex: 1;
     min-width: 300px;
+    box-shadow: 0 2px 5px rgba(62, 39, 35, 0.05);
 }
 
 .full-width {
@@ -136,7 +146,7 @@ body {
     margin-bottom: 15px;
 }
 
-/* Input Fields Styling */
+/* Interactive Input Divisions */
 .input-div {
     margin-bottom: 12px;
 }
@@ -144,8 +154,9 @@ body {
 .input-div label {
     display: block;
     font-size: 0.8rem;
-    color: var(--text-grey);
+    color: var(--text-color);
     margin-bottom: 4px;
+    font-weight: bold;
 }
 
 input, select {
@@ -158,7 +169,13 @@ input, select {
     font-size: 0.9rem;
 }
 
-/* Buttons Layout */
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--text-grey);
+    background-color: #ffffff;
+}
+
+/* Custom Component Layout Rows */
 .btn-row {
     display: flex;
     gap: 10px;
@@ -174,6 +191,7 @@ input, select {
     flex: 2;
 }
 
+/* Core Buttons Base Classes */
 .btn {
     padding: 10px 15px;
     border: none;
@@ -181,17 +199,26 @@ input, select {
     font-size: 0.85rem;
     font-weight: bold;
     cursor: pointer;
+    transition: background 0.2s;
 }
 
 .btn-blue {
-    background-color: var(--blue);
-    color: #000;
+    background-color: var(--cyan);
+    color: #ffffff;
+}
+
+.btn-blue:hover {
+    background-color: var(--text-grey);
 }
 
 .btn-dark {
-    background-color: #1e293b;
-    border: 1px solid #334155;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-line);
     color: var(--text-color);
+}
+
+.btn-dark:hover {
+    background-color: var(--border-line);
 }
 
 .btn-green {
@@ -199,7 +226,11 @@ input, select {
     color: #fff;
 }
 
-/* List Results Design */
+.btn-green:hover {
+    background-color: #3d5649;
+}
+
+/* Dynamic List Outputs Styling */
 .list-container {
     background-color: var(--bg-input);
     border: 1px solid var(--border-line);
@@ -210,7 +241,7 @@ input, select {
 }
 
 .item-row {
-    background-color: rgba(255, 255, 255, 0.02);
+    background-color: var(--bg-box);
     border: 1px solid var(--border-line);
     border-left: 4px solid var(--cyan);
     padding: 10px;
@@ -222,7 +253,7 @@ input, select {
     font-size: 0.85rem;
 }
 
-/* Custom left line colors for different structures */
+/* Sub-structure dynamic identifier classes */
 .linked-list-node {
     border-left-color: var(--purple);
 }
@@ -231,7 +262,16 @@ input, select {
     border-left-color: var(--orange);
 }
 
-/* Bottom Controls Box */
+.dsa-badge {
+    font-size: 0.75rem;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-line);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--text-grey);
+}
+
+/* Bottom Synchronizer Footer Box */
 .footer-box {
     background-color: var(--bg-box);
     border: 1px solid var(--border-line);
@@ -242,10 +282,12 @@ input, select {
     align-items: center;
     flex-wrap: wrap;
     gap: 15px;
+    margin-top: 20px;
 }
 
 .footer-box h4 {
     font-size: 1rem;
+    color: var(--blue);
 }
 
 .footer-box p {
