@@ -402,11 +402,14 @@ function returnBook() {
         return;
     }
 
+    let fineHtml = "";
+    let isLate = false;
     if (targetBook.status === "Borrowed" && targetBook.borrowedTimestamp) {
         let diffMs = Date.now() - targetBook.borrowedTimestamp;
         let diffDays = diffMs / (1000 * 60 * 60 * 24);
         if (diffDays > 7) {
-            Swal.fire({ title: 'Late Return', text: 'Book returned after 1 week. Fine: Rs.200', icon: 'warning' });
+            isLate = true;
+            fineHtml = "<br><br><b style='color: var(--red);'>Late Return: Book returned after 1 week. Fine: Rs.200</b>";
         }
     }
 
@@ -419,11 +422,15 @@ function returnBook() {
     targetBook.borrowedTimestamp = null;
     targetBook.borrowerId = null;
 
-    if (nextPerson !== null) {
-        Swal.fire({ title: 'Success!', text: 'Book ID ' + bId + ' returned successfully. It is now reserved for waitlisted Member ' + nextPerson + '.', icon: 'success' });
-    } else {
-        Swal.fire({ title: 'Success!', text: 'Book ID ' + bId + ' returned successfully. It is now available.', icon: 'success' });
-    }
+    let successMsg = nextPerson !== null 
+        ? 'Book ID ' + bId + ' returned successfully. It is now reserved for waitlisted Member ' + nextPerson + '.'
+        : 'Book ID ' + bId + ' returned successfully. It is now available.';
+
+    Swal.fire({ 
+        title: isLate ? 'Returned (With Fine)' : 'Success!', 
+        html: successMsg + fineHtml, 
+        icon: isLate ? 'warning' : 'success' 
+    });
 
     insertIntoTable(bookDatabase, bId, targetBook);
     saveAllData();
@@ -804,6 +811,7 @@ function uiRenderBorrowedBooks(bookList = null) {
         let memberName = memberObj ? memberObj.name : "Unknown Member";
         
         let dateStr = b.borrowedTimestamp ? new Date(b.borrowedTimestamp).toLocaleString() : "Unknown Date";
+        let dueStr = b.borrowedTimestamp ? new Date(b.borrowedTimestamp + 7 * 24 * 60 * 60 * 1000).toLocaleString() : "Unknown Date";
 
         let element = document.createElement('div');
         element.className = 'item-row';
@@ -812,7 +820,10 @@ function uiRenderBorrowedBooks(bookList = null) {
                 <strong>${b.title} (ID: ${b.id})</strong><br>
                 <span>Borrowed by: ${memberName} (ID: ${mId})</span>
             </div>
-            <span style="color: var(--orange); font-size: 0.9em;">Date: ${dateStr}</span>`;
+            <div style="text-align: right;">
+                <span style="color: var(--orange); font-size: 0.9em; display: block;">Issue Date: ${dateStr}</span>
+                <span style="color: var(--red); font-size: 0.9em; display: block;">Due Date: ${dueStr}</span>
+            </div>`;
         container.appendChild(element);
     }
 }
@@ -906,8 +917,9 @@ function populateRawData() {
 
     let sampleMembers = [
         { name: "Hibah Zehra", type: "Student" },
-        { name: "Maheen", type: "Student" },
-        { name: "Kumail", type: "Faculty" }
+        { name: "Gul e Maheen", type: "Student" },
+        { name: "Shiza Jamal", type: "Student" },
+        { name: "Laveeza Khan Niazi", type: "Student" }
     ];
 
     for (let i = 0; i < sampleMembers.length; i++) {
@@ -926,6 +938,8 @@ function populateRawData() {
     let book1 = searchInTable(bookDatabase, "1000");
     if (book1) {
         book1.status = "Borrowed";
+        book1.borrowerId = "2000";
+        book1.borrowedTimestamp = Date.now() - 14 * 24 * 60 * 60 * 1000;
         insertIntoTable(bookDatabase, "1000", book1);
         addNodeAtStart(activityLogs, "Raw Data Populate: Issued Book ID 1000 to Member 2000");
         enqueueMember(book1.waitlist, "2001");
@@ -935,6 +949,8 @@ function populateRawData() {
     let book2 = searchInTable(bookDatabase, "1002");
     if (book2) {
         book2.status = "Borrowed";
+        book2.borrowerId = "2001";
+        book2.borrowedTimestamp = Date.now();
         insertIntoTable(bookDatabase, "1002", book2);
         addNodeAtStart(activityLogs, "Raw Data Populate: Issued Book ID 1002 to Member 2001");
     }
