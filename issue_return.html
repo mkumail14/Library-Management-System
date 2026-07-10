@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library System - Circulation</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
@@ -43,7 +44,21 @@
                 <h3>Book Waiting Lists (Queues)</h3>
                 <p class="note">Shows queues for books that are already borrowed.</p>
                 <div class="list-container" id="queueListDisplay">
-                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="box full-width">
+                <h3>Borrowed Books Records</h3>
+                <div class="search-bar">
+                    <input type="text" id="searchBorrowed" placeholder="Search by book/borrower name or ID...">
+                    <button class="btn btn-dark" onclick="searchBorrowedBooks()">Search</button>
+                    <button class="btn btn-dark" onclick="sortBorrowedBooks()">Sort by Date</button>
+                    <button class="btn btn-dark" onclick="resetBorrowedSearch()">Reset Filters</button>
+                </div>
+                <div class="list-container" id="borrowedBooksDisplay">
+                </div>
             </div>
         </div>
     </div>

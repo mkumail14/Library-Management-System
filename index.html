@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library System - Books</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
@@ -74,9 +75,37 @@
                         <option value="timestamp">Sort by Date Created</option>
                     </select>
                     <button class="btn btn-dark" onclick="sortBooks()">Sort List (Merge Sort)</button>
+
+                    <select id="filterBookStatus" style="max-width: 180px;" onchange="filterBooks()">
+                        <option value="All">All</option>
+                        <option value="Available">Available</option>
+                        <option value="Borrowed">Borrowed</option>
+                    </select>
                 </div>
                 <div class="list-container" id="bookListDisplay">
                     </div>
+            </div>
+
+            <div class="box full-width">
+                <h3>All Members in Library</h3>
+                <div class="search-bar">
+                    <input type="text" id="searchMemberName" placeholder="Search member by exact name...">
+                    <button class="btn btn-dark" onclick="searchMember()">Search (Binary Search)</button>
+                    
+                    <select id="sortMemberCriteria" style="max-width: 180px;">
+                        <option value="name">Sort by Name</option>
+                        <option value="id">Sort by ID</option>
+                    </select>
+                    <button class="btn btn-dark" onclick="sortMembers()">Sort List (Merge Sort)</button>
+
+                    <select id="filterMemberType" style="max-width: 180px;" onchange="filterMembers()">
+                        <option value="All">All</option>
+                        <option value="Faculty">only faculty</option>
+                        <option value="Student">only student</option>
+                    </select>
+                </div>
+                <div class="list-container" id="memberListDisplay">
+                </div>
             </div>
         </div>
     </div>
