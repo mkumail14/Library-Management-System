@@ -27,12 +27,14 @@
             <div class="box">
                 <h3>Issue or Return a Book</h3>
                 <div class="input-div">
-                    <label>Enter Member ID</label>
-                    <input type="text" id="inputMemberId" placeholder="e.g., 2000">
+                    <label>Select Member</label>
+                    <input list="memberDatalist" id="inputMemberId" placeholder="Type to search Member Name or ID...">
+                    <datalist id="memberDatalist"></datalist>
                 </div>
                 <div class="input-div">
-                    <label>Enter Book ID</label>
-                    <input type="text" id="inputBookId" placeholder="e.g., 1000">
+                    <label>Select Book</label>
+                    <input list="bookDatalist" id="inputBookId" placeholder="Type to search Book Title or ID...">
+                    <datalist id="bookDatalist"></datalist>
                 </div>
                 <div class="btn-row" style="margin-top: 30px;">
                     <button class="btn btn-blue" onclick="issueBook()">Issue Book</button>

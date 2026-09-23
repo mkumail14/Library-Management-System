@@ -29,6 +29,7 @@ function insertIntoTable(targetTable, key, value) {
     bucket.push([key, value]);
 }
 
+
 function searchInTable(targetTable, key) {
     let index = calculateHash(key);
     let bucket = targetTable[index];
@@ -253,8 +254,12 @@ function addMember() {
 }
 
 function issueBook() {
-    let mId = document.getElementById('inputMemberId').value.trim();
-    let bId = document.getElementById('inputBookId').value.trim();
+    let mIdRaw = document.getElementById('inputMemberId').value.trim();
+    let bIdRaw = document.getElementById('inputBookId').value.trim();
+    let mId = mIdRaw.split(" - ")[0].trim();
+    let bId = bIdRaw.split(" - ")[0].trim();
+
+    console.log(mId)
 
     if (mId === "" || bId === "") {
         Swal.fire({ title: 'Error!', text: 'Please enter both Member ID and Book ID.', icon: 'error' });
@@ -372,8 +377,10 @@ function issueBook() {
 }
 
 function returnBook() {
-    let mId = document.getElementById('inputMemberId').value.trim();
-    let bId = document.getElementById('inputBookId').value.trim();
+    let mIdRaw = document.getElementById('inputMemberId').value.trim();
+    let bIdRaw = document.getElementById('inputBookId').value.trim();
+    let mId = mIdRaw.split(" - ")[0].trim();
+    let bId = bIdRaw.split(" - ")[0].trim();
     
     if (mId === "" || bId === "") {
         Swal.fire({ title: 'Error!', text: 'Please enter both Member ID and Book ID to return.', icon: 'error' });
@@ -510,6 +517,7 @@ function refreshDisplay() {
     uiRenderLogs();
     uiRenderQueues();
     if (typeof uiRenderBorrowedBooks === "function") uiRenderBorrowedBooks();
+    if (typeof uiPopulateDatalists === "function") uiPopulateDatalists();
 }
 
 function uiRenderBooks() {
@@ -691,7 +699,6 @@ function uiRenderQueues() {
     }
 }
 
-
 function downloadCSV() {
     let data = convertLinkedListToArray(activityLogs);
     if (data.length === 0) return;
@@ -790,7 +797,6 @@ function resetAllData() {
         }
     });
 }
-
 function uiRenderBorrowedBooks(bookList = null) {
     let container = document.getElementById('borrowedBooksDisplay');
     if (!container) return;
@@ -957,4 +963,140 @@ function populateRawData() {
 
     saveAllData();
     Swal.fire({ title: 'Success!', text: 'System populated!', icon: 'success' }).then(() => { location.reload(); });
+}
+
+function searchHistory() {
+    let type = document.getElementById('historySearchType').value;
+    let query = document.getElementById('historySearchInput').value.toLowerCase().trim();
+    let container = document.getElementById('historyDisplay');
+    
+    if (!container) return;
+    if (query === "") {
+        container.innerHTML = `<div style="color: var(--text-grey); padding: 10px;">Please enter a search term.</div>`;
+        return;
+    }
+
+    container.innerHTML = "";
+    
+    let allBooks = getTableValuesAsArray(bookDatabase);
+    let allMembers = getTableValuesAsArray(memberDatabase);
+    let logs = convertLinkedListToArray(activityLogs);
+    
+    let resultsHtml = "";
+    let matchFound = false;
+
+    if (type === 'book') {
+        let matchedBooks = allBooks.filter(b => b.title.toLowerCase().includes(query) || String(b.id) === query);
+        
+        if (matchedBooks.length > 0) {
+            matchFound = true;
+            matchedBooks.forEach(b => {
+                resultsHtml += `<div style="margin-bottom: 15px; border-bottom: 1px dashed saddlebrown; padding-bottom: 10px;">`;
+                resultsHtml += `<h4 style="color: #5B2501; margin-bottom: 8px;">Book: ${b.title} (ID: ${b.id})</h4>`;
+                
+                if (b.status === "Borrowed" && b.borrowerId) {
+                    let borrower = searchInTable(memberDatabase, b.borrowerId);
+                    let borrowerName = borrower ? borrower.name : "Unknown";
+                    resultsHtml += `<div class="item-row"><strong>Current Borrower:</strong> <span>${borrowerName} (ID: ${b.borrowerId})</span></div>`;
+                } else {
+                    resultsHtml += `<div class="item-row"><strong>Current Status:</strong> <span style="color: var(--green)">Available</span></div>`;
+                }
+                
+                let queueArr = convertQueueToArray(b.waitlist);
+                if (queueArr.length > 0) {
+                    resultsHtml += `<div style="margin-top: 10px;"><strong>Current Waitlist:</strong></div>`;
+                    queueArr.forEach((mId, index) => {
+                        let wMember = searchInTable(memberDatabase, mId);
+                        let wName = wMember ? wMember.name : "Unknown";
+                        resultsHtml += `<div class="item-row queue-node" style="margin-left: 20px; margin-top: 5px;"><span>${index + 1}. ${wName} (ID: ${mId})</span></div>`;
+                    });
+                } else {
+                    resultsHtml += `<div class="item-row" style="color: var(--text-grey); margin-top: 5px;">No active waitlist.</div>`;
+                }
+                
+                let bookLogs = logs.filter(l => l.text.includes(String(b.id)));
+                if (bookLogs.length > 0) {
+                    resultsHtml += `<div style="margin-top: 10px;"><strong>Activity History:</strong></div>`;
+                    bookLogs.forEach(l => {
+                        resultsHtml += `<div class="item-row linked-list-node" style="margin-left: 20px; margin-top: 5px;">
+                            <span>${l.text}</span> <span style="font-size: 0.8em; color: var(--text-grey);">${l.time}</span>
+                        </div>`;
+                    });
+                }
+                resultsHtml += `</div>`;
+            });
+        }
+    } else if (type === 'user') {
+        let matchedUsers = allMembers.filter(m => m.name.toLowerCase().includes(query) || String(m.id) === query);
+        
+        if (matchedUsers.length > 0) {
+            matchFound = true;
+            matchedUsers.forEach(m => {
+                resultsHtml += `<div style="margin-bottom: 15px; border-bottom: 1px dashed saddlebrown; padding-bottom: 10px;">`;
+                resultsHtml += `<h4 style="color: #5B2501; margin-bottom: 8px;">Member: ${m.name} (ID: ${m.id})</h4>`;
+                
+                let currentlyBorrowed = allBooks.filter(b => b.status === "Borrowed" && String(b.borrowerId) === String(m.id));
+                if (currentlyBorrowed.length > 0) {
+                    resultsHtml += `<div style="margin-top: 10px;"><strong>Currently Borrowed Books:</strong></div>`;
+                    currentlyBorrowed.forEach(b => {
+                        resultsHtml += `<div class="item-row" style="margin-left: 20px; margin-top: 5px;"><span>${b.title} (ID: ${b.id})</span></div>`;
+                    });
+                } else {
+                    resultsHtml += `<div class="item-row" style="color: var(--text-grey); margin-top: 5px;">No books currently borrowed.</div>`;
+                }
+                
+                let waitlistedBooks = allBooks.filter(b => convertQueueToArray(b.waitlist).includes(String(m.id)));
+                if (waitlistedBooks.length > 0) {
+                    resultsHtml += `<div style="margin-top: 10px;"><strong>Waitlisted For:</strong></div>`;
+                    waitlistedBooks.forEach(b => {
+                        resultsHtml += `<div class="item-row queue-node" style="margin-left: 20px; margin-top: 5px;"><span>${b.title} (ID: ${b.id})</span></div>`;
+                    });
+                } else {
+                    resultsHtml += `<div class="item-row" style="color: var(--text-grey); margin-top: 5px;">Not in any waitlists.</div>`;
+                }
+                
+                let userLogs = logs.filter(l => l.text.includes(String(m.id)));
+                if (userLogs.length > 0) {
+                    resultsHtml += `<div style="margin-top: 10px;"><strong>Activity History:</strong></div>`;
+                    userLogs.forEach(l => {
+                        resultsHtml += `<div class="item-row linked-list-node" style="margin-left: 20px; margin-top: 5px;">
+                            <span>${l.text}</span> <span style="font-size: 0.8em; color: var(--text-grey);">${l.time}</span>
+                        </div>`;
+                    });
+                }
+                resultsHtml += `</div>`;
+            });
+        }
+    }
+
+    if (!matchFound) {
+        container.innerHTML = `<div style="color: var(--red); padding: 10px;">No matching records found.</div>`;
+    } else {
+        container.innerHTML = resultsHtml;
+    }
+}
+
+function uiPopulateDatalists() {
+    let memberDatalist = document.getElementById('memberDatalist');
+    let bookDatalist = document.getElementById('bookDatalist');
+    
+    if (memberDatalist) {
+        memberDatalist.innerHTML = "";
+        let allMembers = getTableValuesAsArray(memberDatabase);
+        allMembers.forEach(m => {
+            let option = document.createElement('option');
+            option.value = m.id + " - " + m.name;
+            memberDatalist.appendChild(option);
+        });
+    }
+    
+    if (bookDatalist) {
+        bookDatalist.innerHTML = "";
+        let allBooks = getTableValuesAsArray(bookDatabase);
+        allBooks.forEach(b => {
+            let option = document.createElement('option');
+            option.value = b.id + " - " + b.title;
+            bookDatalist.appendChild(option);
+        });
+    }
 }

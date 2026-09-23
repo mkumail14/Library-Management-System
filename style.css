@@ -7,7 +7,7 @@
 
 body {
     background-color: wheat; 
-    color: sienna;           
+    color: #5B2501;           
     padding-bottom: 40px;
 }
 
@@ -15,7 +15,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: maroon; 
+    background-color: #5B2501; 
     border-bottom: 2px solid saddlebrown;
     padding: 0 30px;
     height: 60px;
@@ -74,7 +74,7 @@ body {
 
 .main-header h1 {
     font-size: 1.8rem;
-    color: maroon;
+    color: #5B2501;
 }
 
 .main-header p {
@@ -114,7 +114,7 @@ body {
 
 .box h3 {
     font-size: 1.1rem;
-    color: maroon;
+    color: #5B2501;
     margin-bottom: 15px;
     padding-bottom: 5px;
     border-bottom: 1px solid saddlebrown;
@@ -134,7 +134,7 @@ body {
 .input-div label {
     display: block;
     font-size: 0.8rem;
-    color: sienna;
+    color: #5B2501;
     margin-bottom: 4px;
     font-weight: bold;
 }
@@ -181,7 +181,7 @@ input:focus, select:focus {
 }
 
 .btn-blue {
-    background-color: sienna;
+    background-color: #5B2501;
     color: white;
 }
 
@@ -220,7 +220,7 @@ input:focus, select:focus {
 .item-row {
     background-color: white;
     border: 1px solid saddlebrown;
-    border-left: 4px solid sienna;
+    border-left: 4px solid #5B2501;
     padding: 10px;
     margin-bottom: 8px;
     border-radius: 4px;
@@ -262,7 +262,7 @@ input:focus, select:focus {
 
 .footer-box h4 {
     font-size: 1rem;
-    color: maroon;
+    color: #5B2501;
 }
 
 .footer-box p {

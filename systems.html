@@ -34,6 +34,23 @@
 
         <div class="row">
             <div class="box full-width">
+                <h3>History Record</h3>
+                <div class="search-bar">
+                    <select id="historySearchType" style="flex: 1;">
+                        <option value="book">Book (ID or Title)</option>
+                        <option value="user">User (ID or Name)</option>
+                    </select>
+                    <input type="text" id="historySearchInput" placeholder="Enter search term..." style="flex: 3;">
+                    <button class="btn btn-blue" onclick="searchHistory()">Search</button>
+                </div>
+                <div class="list-container" id="historyDisplay" style="height: auto; min-height: 100px; max-height: 250px;">
+                    <div style="color: var(--text-grey); padding: 10px;">Search results will appear here.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="box full-width">
                 <h3>Project Details & Academic Credits</h3>
                 <div class="btn-row" style="display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; line-height: 1.5;">
                     <p><strong>Course Name:</strong> Data Structures and Applications</p>
