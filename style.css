@@ -5,9 +5,26 @@
     font-family: Arial, sans-serif;
 }
 
+:root {
+    --primary-bg: #F3E6D5;
+    --primary-color: #D45060;
+    --secondary-bg: #fdfaf6;
+    --border-color: #D45060;
+    --hover-bg: rgba(212, 80, 96, 0.1);
+    --text-main: #333;
+    --text-light: #777;
+    
+    /* Variables used in JS */
+    --red: #D45060;
+    --green: #28a745;
+    --orange: #fd7e14;
+    --purple: #6f42c1;
+    --text-grey: #6c757d;
+}
+
 body {
-    background-color: wheat; 
-    color: #5B2501;           
+    background-color: var(--primary-bg); 
+    color: var(--primary-color);           
     padding-bottom: 40px;
 }
 
@@ -15,8 +32,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #5B2501; 
-    border-bottom: 2px solid saddlebrown;
+    background-color: var(--primary-color); 
+    border-bottom: 2px solid var(--border-color);
     padding: 0 30px;
     height: 60px;
     position: sticky;
@@ -27,7 +44,7 @@ body {
 .logo {
     font-weight: bold;
     font-size: 1.2rem;
-    color: wheat; 
+    color: var(--primary-bg); 
 }
 
 .menu {
@@ -38,7 +55,8 @@ body {
 
 .tab-link {
     text-decoration: none;
-    color: tan; 
+    color: var(--primary-bg); 
+    opacity: 0.8;
     font-size: 0.9rem;
     display: flex;
     align-items: center;
@@ -48,15 +66,15 @@ body {
 }
 
 .tab-link:hover {
-    color: wheat;
-    background-color: rgba(255, 255, 255, 0.05);
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .tab-link.active {
-    color: wheat;
+    opacity: 1;
     font-weight: bold;
-    background-color: rgba(0, 0, 0, 0.15);
-    border-bottom: 4px solid wheat;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-bottom: 4px solid var(--primary-bg);
 }
 
 /* Main Layout Framework */
@@ -68,17 +86,17 @@ body {
 
 .main-header {
     margin-bottom: 25px;
-    border-bottom: 1px solid saddlebrown;
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 15px;
 }
 
 .main-header h1 {
     font-size: 1.8rem;
-    color: #5B2501;
+    color: var(--primary-color);
 }
 
 .main-header p {
-    color: brown;
+    color: var(--text-light);
     font-size: 0.9rem;
     margin-top: 4px;
 }
@@ -100,7 +118,7 @@ body {
 
 .box {
     background-color: white;
-    border: 1px solid saddlebrown;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 20px;
     flex: 1;
@@ -114,15 +132,15 @@ body {
 
 .box h3 {
     font-size: 1.1rem;
-    color: #5B2501;
+    color: var(--primary-color);
     margin-bottom: 15px;
     padding-bottom: 5px;
-    border-bottom: 1px solid saddlebrown;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .note {
     font-size: 0.8rem;
-    color: brown;
+    color: var(--text-light);
     margin-top: -10px;
     margin-bottom: 15px;
 }
@@ -134,7 +152,7 @@ body {
 .input-div label {
     display: block;
     font-size: 0.8rem;
-    color: #5B2501;
+    color: var(--primary-color);
     margin-bottom: 4px;
     font-weight: bold;
 }
@@ -142,16 +160,16 @@ body {
 input, select {
     width: 100%;
     padding: 10px;
-    background-color: tan; 
-    border: 1px solid saddlebrown;
+    background-color: var(--secondary-bg); 
+    border: 1px solid var(--border-color);
     border-radius: 6px;
-    color: black;
+    color: var(--text-main);
     font-size: 0.9rem;
 }
 
 input:focus, select:focus {
     outline: none;
-    border-color: brown;
+    border-color: var(--primary-color);
     background-color: white;
 }
 
@@ -181,36 +199,36 @@ input:focus, select:focus {
 }
 
 .btn-blue {
-    background-color: #5B2501;
+    background-color: var(--primary-color);
     color: white;
 }
 
 .btn-blue:hover {
-    background-color: brown;
+    background-color: #b53d4e;
 }
 
 .btn-dark {
-    background-color: tan;
-    border: 1px solid saddlebrown;
-    color: black;
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    color: var(--primary-color);
 }
 
 .btn-dark:hover {
-    background-color: sandbrown;
+    background-color: var(--hover-bg);
 }
 
 .btn-green {
-    background-color: darkgreen;
+    background-color: var(--green);
     color: white;
 }
 
 .btn-green:hover {
-    background-color: green;
+    background-color: #218838;
 }
 
 .list-container {
-    background-color: tan;
-    border: 1px solid saddlebrown;
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     height: 250px;
     overflow-y: auto;
@@ -219,8 +237,8 @@ input:focus, select:focus {
 
 .item-row {
     background-color: white;
-    border: 1px solid saddlebrown;
-    border-left: 4px solid #5B2501;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--primary-color);
     padding: 10px;
     margin-bottom: 8px;
     border-radius: 4px;
@@ -231,25 +249,25 @@ input:focus, select:focus {
 }
 
 .linked-list-node {
-    border-left-color: purple; 
+    border-left-color: var(--purple); 
 }
 
 .queue-node {
-    border-left-color: darkorange; 
+    border-left-color: var(--orange); 
 }
 
 .dsa-badge {
     font-size: 0.75rem;
-    background-color: wheat;
-    border: 1px solid saddlebrown;
+    background-color: var(--primary-bg);
+    border: 1px solid var(--border-color);
     padding: 2px 8px;
     border-radius: 4px;
-    color: brown;
+    color: var(--primary-color);
 }
 
 .footer-box {
     background-color: white;
-    border: 1px solid saddlebrown;
+    border: 1px solid var(--border-color);
     padding: 15px 20px;
     border-radius: 8px;
     display: flex;
@@ -262,10 +280,10 @@ input:focus, select:focus {
 
 .footer-box h4 {
     font-size: 1rem;
-    color: #5B2501;
+    color: var(--primary-color);
 }
 
 .footer-box p {
     font-size: 0.8rem;
-    color: brown;
+    color: var(--text-light);
 }
